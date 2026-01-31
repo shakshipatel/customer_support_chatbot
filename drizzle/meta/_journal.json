@@ -8,6 +8,13 @@
       "when": 1769163331517,
       "tag": "0000_purple_bloodstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1769807585529,
+      "tag": "0001_aromatic_juggernaut",
+      "breakpoints": true
     }
   ]
 }
