@@ -27,3 +27,6 @@ export const metadata = pgTable("metadata", {
   external_links: text("external_links"),
   created_at: text("created_at").default(sql`now()`),
 });
+
+
+

@@ -1,6 +1,6 @@
 import { isAuthorized } from "@/lib/isAuthorized";
 import { NextRequest, NextResponse } from "next/server";
-import { summarizeMarkdown } from "@/lib/openAI";
+import { summarizeMarkdown } from "@/lib/gemini";
 import react from "react";
 import { error } from "console";
 
@@ -41,49 +41,48 @@ export async function POST(req: NextRequest) {
 
         const markdown = await summarizeMarkdown(fileContent);
         formattedContent = markdown;
-      } else {
+      } 
+    }
+    else {
         body = await req.json();
         type = body.type;
       }
 
       if (type === "website") {
+        const zenUrl = new URL("https://api.zenrows.com/v1/");
+        zenUrl.searchParams.set("apikey", process.env.ZENROWS_API_KEY!);
+        zenUrl.searchParams.set("url", body.url);
+        zenUrl.searchParams.set("response_type", "markdown");
 
-
-const zenUrl = new URL("https://api.zenrows.com/v1/");
-zenUrl.searchParams.set("apikey", process.env.ZENROWS_API_KEY!);
-zenUrl.searchParams.set("url", body.url);
-zenUrl.searchParams.set("respnse_type", "markdown");
-
-const res = await fetch(zenUrl.toString(), {
-  headers: {
-    "User-Agent":"OneMinuteSupportBot/1.0",
-  },
-}); 
-const html = await res.text();
-if(!res.text){
-  return NextResponse.json({ 
-    error: "Failed to fetch website content",
-    status: res.status,
-body: html.slice(0,500),
-  },
-  {status:502}
-);
-
-
-}
-
-
-
-
-
-
-const markdown = await summarizeMarkdown(html);
-console.log("MARKDOWN", markdown);
+        const res = await fetch(zenUrl.toString(), {
+          headers: {
+            "User-Agent": "OneMinuteSupportBot/1.0",
+          },
+        });
+        const html = await res.text();
+        if (!res.text) {
+          return NextResponse.json(
+            {
+              error: "Failed to fetch website content",
+              status: res.status,
+              body: html.slice(0, 500),
+            },
+            { status: 502 },
+          );
+        }
+       
+        const markdown = await summarizeMarkdown(html);
+          console.log(markdown);
       }
-    }
-
-
-
-    
-  } catch (error) {}
+    return NextResponse.json(
+      { message: "Source added successfully" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("Error in knowledge store:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
 }
