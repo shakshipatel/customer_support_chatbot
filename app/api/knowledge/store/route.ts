@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { summarizeMarkdown } from "@/lib/gemini";
 import react from "react";
 import { error } from "console";
+import { knowledge_source } from "@/db/schema";
+import { db } from "@/db/client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,39 +43,79 @@ export async function POST(req: NextRequest) {
 
         const markdown = await summarizeMarkdown(fileContent);
         formattedContent = markdown;
-      } 
-    }
-    else {
-        body = await req.json();
-        type = body.type;
-      }
 
-      if (type === "website") {
-        const zenUrl = new URL("https://api.zenrows.com/v1/");
-        zenUrl.searchParams.set("apikey", process.env.ZENROWS_API_KEY!);
-        zenUrl.searchParams.set("url", body.url);
-        zenUrl.searchParams.set("response_type", "markdown");
-
-        const res = await fetch(zenUrl.toString(), {
-          headers: {
-            "User-Agent": "OneMinuteSupportBot/1.0",
-          },
+        await db.insert(knowledge_source).values({
+          user_email: user.email,
+          type: "upload",
+          name: file.name,
+          content: formattedContent,
+          status: "active",
+          meta_data: JSON.stringify({
+            filename: file.name,
+            size: file.size,
+            rowCount: lines.length - 1,
+            headers: headers,
+          }),
         });
-        const html = await res.text();
-        if (!res.text) {
-          return NextResponse.json(
-            {
-              error: "Failed to fetch website content",
-              status: res.status,
-              body: html.slice(0, 500),
-            },
-            { status: 502 },
-          );
-        }
-       
-        const markdown = await summarizeMarkdown(html);
-          console.log(markdown);
+
+        return NextResponse.json(
+          { message: "CSV file uploaded successfully" },
+          { status: 200 },
+        );
       }
+    } else {
+      body = await req.json();
+      type = body.type;
+    }
+
+    if (type === "website") {
+      const zenUrl = new URL("https://api.zenrows.com/v1/");
+      zenUrl.searchParams.set("apikey", process.env.ZENROWS_API_KEY!);
+      zenUrl.searchParams.set("url", body.url);
+      zenUrl.searchParams.set("response_type", "markdown");
+
+      const res = await fetch(zenUrl.toString(), {
+        headers: {
+          "User-Agent": "OneMinuteSupportBot/1.0",
+        },
+      });
+      const html = await res.text();
+      if (!res.text) {
+        return NextResponse.json(
+          {
+            error: "Failed to fetch website content",
+            status: res.status,
+            body: html.slice(0, 500),
+          },
+          { status: 502 },
+        );
+      }
+
+      const markdown = await summarizeMarkdown(html);
+      await db.insert(knowledge_source).values({
+        user_email: user.email,
+        type: "website",
+        name: body.url,
+        content: markdown,
+        status: "active",
+        source_url: body.url,
+      });
+    } else if (type === "text") {
+      let content = body.content;
+
+      if (body.content.length > 500) {
+        const markdown = await summarizeMarkdown(body.content);
+        content = markdown;
+      }
+      await db.insert(knowledge_source).values({
+        user_email: user.email,
+        type: "text",
+        name: body.title,
+        status: "active",
+        content: content,
+      });
+    }
+
     return NextResponse.json(
       { message: "Source added successfully" },
       { status: 200 },

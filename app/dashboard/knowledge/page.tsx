@@ -1,11 +1,13 @@
 "use client";
 
 import AddKnowledgeModal from "@/components/dashboard/knowledge/addKnowledgeModel";
+import KnowledgeTable from "@/components/dashboard/knowledge/knowledgeTable";
 import QuickActions from "@/components/dashboard/knowledge/quickActions";
+import SourceDetailsSheet from "@/components/dashboard/knowledge/SourceDetailsSheet";
 import { Button } from "@/components/ui/button";
 import { is } from "drizzle-orm";
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const [defaultTab, setDefaultTab] = useState("website");
@@ -15,6 +17,10 @@ const Page = () => {
     [],
   );
   const [knowledgeSourcesLoader, setKnowledgeSourcesLoader] = useState(true);
+  const [selectedSource, setSelectedSource] = useState<KnowledgeSource | null>(
+    null,
+  );
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleImportSource = async (data: any) => {
     setKnowledgeStoringLoader(true);
@@ -54,6 +60,22 @@ const Page = () => {
     setIsAddOpen(true);
   };
 
+  useEffect(() => {
+    const fetchKnowledgeSources = async () => {
+      const res = await fetch("/api/knowledge/fetch");
+      const data = await res.json();
+      setKnowledgeSources(data.sources);
+      setKnowledgeSourcesLoader(false);
+    };
+    fetchKnowledgeSources();
+  }, []);
+
+  const handleSourceClick = (source: KnowledgeSource) => {
+    // Handle source click action here
+    setSelectedSource(source);
+    setIsSheetOpen(true);
+  };
+
   return (
     <div className="p-6 md:p-8 space-y-8 max-w-7xl mx-auto animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -78,7 +100,11 @@ const Page = () => {
       </div>
       {/* Quick Actions */}
       <QuickActions onOpenModal={openModel} />
-
+      <KnowledgeTable
+        sources={knowledgeSources}
+        isLoading={knowledgeSourcesLoader}
+        onSourceClick={handleSourceClick}
+      />
       <AddKnowledgeModal
         isOpen={isAddOpen}
         setIsOpen={setIsAddOpen}
@@ -88,8 +114,16 @@ const Page = () => {
         isLoading={knowledgeStoringLoader}
         existingSources={knowledgeSources}
       />
+      <SourceDetailsSheet
+        isOpen={isSheetOpen}
+        setIsOpen={setIsSheetOpen}
+        selectedSource={selectedSource}
+      />
     </div>
   );
 };
 
 export default Page;
+function setKnowledgeSources(sources: any) {
+  throw new Error("Function not implemented.");
+}

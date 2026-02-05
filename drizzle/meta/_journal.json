@@ -15,6 +15,13 @@
       "when": 1769807585529,
       "tag": "0001_aromatic_juggernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770210197647,
+      "tag": "0002_productive_proemial_gods",
+      "breakpoints": true
     }
   ]
 }
