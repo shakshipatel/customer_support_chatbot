@@ -14,8 +14,6 @@ import {
 import { Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-
-
 interface KnowledgeSource {
   id: string;
   name: string;
@@ -169,35 +167,32 @@ const Page = () => {
   };
 
   const handleDeleteSection = async () => {
-  if (!selectedSection || selectedSection.id === "new") return;
+    if (!selectedSection || selectedSection.id === "new") return;
 
-  if (
-    !confirm(
-      `Are you sure you want to delete "${selectedSection.name}"? This action cannot be undone.`
-    )
-  ) {
-    return;
-  }
+    if (
+      !confirm(
+        `Are you sure you want to delete "${selectedSection.name}"? This action cannot be undone.`,
+      )
+    ) {
+      return;
+    }
 
-  try {
-    setIsSaving(true);
-    const response = await fetch(`/api/section/delete`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: selectedSection.id }),
-    });
-    if (!response.ok) throw new Error("Failed to delete section");
+    try {
+      setIsSaving(true);
+      const response = await fetch(`/api/section/delete`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: selectedSection.id }),
+      });
+      if (!response.ok) throw new Error("Failed to delete section");
 
-    await fetchSections();
-    setIsSheetOpen(false);
-  } catch (error) {
-  } finally {
-    setIsSaving(false);
-  }
-};
-
-
-
+      await fetchSections();
+      setIsSheetOpen(false);
+    } catch (error) {
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="p-8 space-y-6">
