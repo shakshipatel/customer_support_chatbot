@@ -29,3 +29,18 @@ interface SectionFormData {
   blockedTopics: string;
   fallbackBehavior: string;
 }
+
+
+
+interface Section {
+  id: string;
+  name: string;
+  description: string;
+  sourceCount: number;
+  source_ids?: string[];
+  tone: Tone;
+  scopeLabel: string;
+  allowed_topics?: string;
+  blocked_topics?: string;
+  status: SectionStatus;
+}

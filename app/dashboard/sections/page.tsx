@@ -1,6 +1,7 @@
 "use client";
 
 import SectionFormFields from "@/components/dashboard/sections/sectionFormFields";
+import SectionsTable from "@/components/dashboard/sections/sectionTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -13,18 +14,7 @@ import {
 import { Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-interface Section {
-  id: string;
-  name: string;
-  description: string;
-  sourceCount: number;
-  source_ids?: string[];
-  tone: Tone;
-  scopeLabel: string;
-  allowed_topics?: string;
-  blocked_topics?: string;
-  status: SectionStatus;
-}
+
 
 interface KnowledgeSource {
   id: string;
@@ -56,19 +46,7 @@ const Page = () => {
   const [formData, setFormData] = useState<SectionFormData>(INITIAL_FORM_DATA);
 
   useEffect(() => {
-    const fetchKnowledgeSources = async () => {
-      try {
-        const res = await fetch("/api/knowledge/fetch");
-        const data = await res.json();
-        setKnowledgeSources(data.sources || []);
-      } catch (error) {
-        console.error("Failed to fetch knowledge sources:", error);
-      } finally {
-        setIsLoadingSources(false);
-      }
-    };
-
-    fetchKnowledgeSources();
+    fetchSections();
   }, []);
 
   const handleCreateSection = async () => {
@@ -87,11 +65,139 @@ const Page = () => {
     setIsSheetOpen(true);
   };
 
+  useEffect(() => {
+    const fetchKnowledgeSources = async () => {
+      try {
+        const res = await fetch("/api/knowledge/fetch");
+        const data = await res.json();
+        setKnowledgeSources(data.sources || []);
+      } catch (error) {
+        console.error("Failed to fetch knowledge sources:", error);
+      } finally {
+        setIsLoadingSources(false);
+      }
+    };
+
+    fetchKnowledgeSources();
+  }, []);
+
   const isPreviewMode = selectedSection?.id !== "new";
 
-  const handleSaveSection = async () => {};
+  const fetchSections = async () => {
+    try {
+      setIsLoadingSections(true);
+      const res = await fetch("/api/section/fetch");
+      const data = await res.json();
 
-  const handleDeleteSection = async () => {};
+      const transformedSections: Section[] = data.map((section: any) => ({
+        id: section.id,
+        name: section.name,
+        description: section.description,
+        sourceCount: section.source_ids?.length || 0,
+        source_ids: section.source_ids || [],
+        tone: section.tone as Tone,
+        scopeLabel: section.allowed_topics || "General",
+        allowed_topics: section.allowed_topics,
+        blocked_topics: section.blocked_topics,
+        status: section.status as SectionStatus,
+      }));
+
+      setSections(transformedSections);
+    } catch (error) {
+      console.error("Failed to fetch sections:", error);
+    } finally {
+      setIsLoadingSections(false);
+    }
+  };
+
+  const handleSaveSection = async () => {
+    if (!formData.name.trim()) {
+      alert("Please enter a section name!");
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      alert("Please enter a description");
+      return;
+    }
+
+    if (selectedSources.length === 0) {
+      alert("Please select at least one knowledge source");
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const sectionData = {
+        ...formData,
+        sourceIds: selectedSources,
+        status: "active",
+      };
+
+      const response = await fetch("/api/section/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sectionData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create section");
+      }
+
+      await fetchSections();
+      setIsSheetOpen(false);
+    } catch (error) {
+      console.error("Failed to save section:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePreviewSection = async (section: Section) => {
+    setSelectedSection(section);
+    setFormData({
+      name: section.name,
+      description: section.description,
+      tone: section.tone,
+      allowedTopics: section.allowed_topics || "",
+      blockedTopics: section.blocked_topics || "",
+      fallbackBehavior: "escalate",
+    });
+    setSelectedSources(section.source_ids || []);
+    setIsSheetOpen(true);
+  };
+
+  const handleDeleteSection = async () => {
+  if (!selectedSection || selectedSection.id === "new") return;
+
+  if (
+    !confirm(
+      `Are you sure you want to delete "${selectedSection.name}"? This action cannot be undone.`
+    )
+  ) {
+    return;
+  }
+
+  try {
+    setIsSaving(true);
+    const response = await fetch(`/api/section/delete`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: selectedSection.id }),
+    });
+    if (!response.ok) throw new Error("Failed to delete section");
+
+    await fetchSections();
+    setIsSheetOpen(false);
+  } catch (error) {
+  } finally {
+    setIsSaving(false);
+  }
+};
+
+
+
 
   return (
     <div className="p-8 space-y-6">
@@ -113,7 +219,14 @@ const Page = () => {
       </div>
 
       <Card className="border-white/5 bg-[#0A0A0E]">
-        <CardContent className="p-0" />
+        <CardContent className="p-0">
+          <SectionsTable
+            sections={sections}
+            isLoading={isLoadingSections}
+            onPreview={handlePreviewSection}
+            onCreateSection={handleCreateSection}
+          />
+        </CardContent>
       </Card>
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
