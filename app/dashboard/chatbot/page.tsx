@@ -38,7 +38,7 @@ const ChatbotPage = () => {
   const handleReset = async () => {};
 
   return (
-    <div className="p-6 md:p-8 space-y-8 w-full h-[calc(100vh-64px)] overflow-hidden flex flex-col">
+    <div className="p-6 md:p-8 space-y-8 max-w-400 mx-auto animate-in fade-in duration-500 h-[calc(100vh-64px)] overflow-hidden flex flex-col">
       <div className="flex justify-between items-center shrink-0">
         <div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">
@@ -49,8 +49,8 @@ const ChatbotPage = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col gap-6 h-full min-h-0 w-full lg:max-w-[50vw] lg:mx-auto">
-        <div className="flex flex-col h-full min-h-0 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-screen min-h-0">
+        <div className="lg:col-span-7 flex flex-col h-full min-h-0 space-y-4">
           <ChatSimulator
             messages={messages}
             primaryColor={primaryColor}
