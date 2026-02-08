@@ -119,7 +119,7 @@ const ChatbotPage = () => {
 
   return (
     <div className="p-4 md:p-6 animate-in fade-in duration-500 h-full overflow-hidden flex flex-col w-full">
-      <div className="flex justify-between items-center shrink-0 mb-4">
+      <div className="flex justify-between items-center shrink-0 mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">
             Chatbot Playground
@@ -147,7 +147,7 @@ const ChatbotPage = () => {
             </div>
           </ScrollArea>
         </div>
-        <div className="col-span-7 flex flex-col h-full min-h-0">
+        <div className="col-span-7 flex flex-col h-full min-h-0 max-h-130">
           <ChatSimulator
             messages={messages}
             primaryColor={primaryColor}

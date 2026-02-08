@@ -40,7 +40,8 @@ const ChatSimulator = ({
   scrollRef,
 }: ChatSimulatorProps) => {
   return (
-    <Card className="flex-1 flex flex-col border-white/5 bg-[#0A0A0E] overflow-hidden relative shadow-2xl w-full h-full">
+    <Card className="flex flex-col border-white/5 bg-[#0A0A0E] overflow-hidden relative shadow-2xl w-full h-150">
+
       <div className="h-14 shrink-0 border-b border-white/5 flex items-center justify-between px-4 bg-[#0E0E12] gap-2">
         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
         <span className="text-sm font-medium text-zinc-300 flex-1">
@@ -56,6 +57,7 @@ const ChatSimulator = ({
         </Button>
       </div>
       <ScrollArea className="flex-1 min-h-0 p-4 relative bg-zinc-950/30">
+
         <div className="space-y-4 pb-2 w-full">
           {messages.map((msg, i) => (
             <div
