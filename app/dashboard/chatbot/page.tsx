@@ -118,7 +118,7 @@ const ChatbotPage = () => {
     : false;
 
   return (
-    <div className="p-4 md:p-6 animate-in fade-in duration-500 h-[calc(100vh-64px)] overflow-hidden flex flex-col">
+    <div className="p-4 md:p-6 animate-in fade-in duration-500 h-full overflow-hidden flex flex-col w-full">
       <div className="flex justify-between items-center shrink-0 mb-4">
         <div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">
@@ -129,8 +129,8 @@ const ChatbotPage = () => {
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 flex-1 min-h-0 w-full">
-        <div className="md:col-span-5 h-full min-h-0 overflow-hidden flex flex-col">
+      <div className="grid grid-cols-12 gap-4 flex-1 min-h-0 w-full">
+        <div className="col-span-5 h-full min-h-0 overflow-hidden flex flex-col">
           <ScrollArea className="h-full">
             <div className="space-y-4 pr-4 pb-4">
               <ApperanceConfig
@@ -147,7 +147,7 @@ const ChatbotPage = () => {
             </div>
           </ScrollArea>
         </div>
-        <div className="md:col-span-7 flex flex-col h-full min-h-0">
+        <div className="col-span-7 flex flex-col h-full min-h-0">
           <ChatSimulator
             messages={messages}
             primaryColor={primaryColor}
