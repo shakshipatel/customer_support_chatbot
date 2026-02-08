@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Code, Copy } from "lucide-react";
 import React, { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
   const [copied, setCopied] = useState(false);
@@ -16,7 +17,7 @@ const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
 
   return (
     <Card className="border-white/5 bg-[#0A0A0E]">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
           <Code className="w-4 h-4 text-zinc-500" />
           <CardTitle className="text-sm font-medium text-white uppercase tracking-wider">
@@ -24,8 +25,7 @@ const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
           </CardTitle>
         </div>
       </CardHeader>
-
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-2">
         <div className="relative group">
           <div className="bg-[#050509] border border-white/10 rounded-lg p-3 overflow-hidden">
             <code className="text-[10px] text-zinc-400 font-mono block overflow-x-auto">
@@ -34,7 +34,6 @@ const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
               }" \n defer>\n</script>`}
             </code>
           </div>
-
           <Button
             size="icon"
             variant="secondary"

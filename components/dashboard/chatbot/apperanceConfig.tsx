@@ -1,10 +1,12 @@
+import { Palette, Save } from "lucide-react";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
 import { cn } from "@/lib/utils";
-import { Palette, Save } from "lucide-react";
-import React from "react";
 
 interface AppearanceConfigProps {
   primaryColor: string;
@@ -15,6 +17,7 @@ interface AppearanceConfigProps {
   isSaving: boolean;
   hasChanges: boolean;
 }
+
 const PRESET_COLORS = [
   { name: "Indigo", value: "#4f46e5" },
   { name: "Blue", value: "#2563eb" },
@@ -34,7 +37,7 @@ const ApperanceConfig = ({
 }: AppearanceConfigProps) => {
   return (
     <Card className="border-white/5 bg-[#0a0a0e]">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
           <Palette className="w-4 h-4 text-zinc-500" />
           <CardTitle className="text-sm font-medium text-white uppercase tracking-wider">
@@ -42,9 +45,8 @@ const ApperanceConfig = ({
           </CardTitle>
         </div>
       </CardHeader>
-
-      <CardContent className="space-y-5">
-        <div className="space-y-3">
+      <CardContent className="space-y-3">
+        <div className="space-y-2">
           <Label className="text-zinc-300">Primary Color</Label>
           <div className="flex gap-3">
             {PRESET_COLORS.map((color) => (
@@ -64,7 +66,6 @@ const ApperanceConfig = ({
                 title={color.name}
               />
             ))}
-
             <div className="relative w-6 h-6 rounded-full border-2 border-white/70 ml-2">
               <input
                 type="color"
@@ -79,8 +80,7 @@ const ApperanceConfig = ({
             </div>
           </div>
         </div>
-
-        <div className="space-y-3 pt-3">
+        <div className="space-y-2 pt-2">
           <Label className="text-zinc-300">Welcome Message</Label>
           <Textarea
             value={welcomeMessage}
@@ -89,7 +89,6 @@ const ApperanceConfig = ({
             className="bg-white/2 border-white/10 text-white resize-none text-sm min-h-20"
           />
         </div>
-
         {hasChanges && (
           <Button
             onClick={handleSave}
@@ -110,4 +109,5 @@ const ApperanceConfig = ({
     </Card>
   );
 };
+
 export default ApperanceConfig;

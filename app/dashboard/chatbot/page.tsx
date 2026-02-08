@@ -1,10 +1,11 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
+
 import ApperanceConfig from "@/components/dashboard/chatbot/apperanceConfig";
 import ChatSimulator from "@/components/dashboard/chatbot/chatSimulator";
 import EmbedCodeConfig from "@/components/dashboard/chatbot/embedCodeConfig";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import React, { useEffect, useRef, useState } from "react";
 
 interface ChatBotMetadata {
   id: string;
@@ -23,11 +24,11 @@ const ChatbotPage = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const scrollViewportRef = useRef<HTMLDivElement>(null);
-
   const [primaryColor, setPrimaryColor] = useState("#4f46e5");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+
+  const scrollViewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,8 +118,8 @@ const ChatbotPage = () => {
     : false;
 
   return (
-    <div className="p-6 md:p-8 space-y-8 max-w-400 mx-auto animate-in fade-in duration-500 h-[calc(100vh-64px)] overflow-hidden flex flex-col">
-      <div className="flex justify-between items-center shrink-0">
+    <div className="p-4 md:p-6 animate-in fade-in duration-500 h-[calc(100vh-64px)] overflow-hidden flex flex-col">
+      <div className="flex justify-between items-center shrink-0 mb-4">
         <div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">
             Chatbot Playground
@@ -128,8 +129,25 @@ const ChatbotPage = () => {
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-screen min-h-0">
-        <div className="lg:col-span-7 flex flex-col h-full min-h-0 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 min-h-0">
+        <div className="lg:col-span-5 h-full min-h-0 overflow-hidden flex flex-col">
+          <ScrollArea className="h-full">
+            <div className="space-y-4 pr-4 pb-4">
+              <ApperanceConfig
+                primaryColor={primaryColor}
+                setPrimaryColor={setPrimaryColor}
+                welcomeMessage={welcomeMessage}
+                setWelcomeMessage={setWelcomeMessage}
+                handleSave={handleSave}
+                isSaving={isSaving}
+                hasChanges={hasChanges}
+              />
+
+              <EmbedCodeConfig chatbotId={metadata?.id} />
+            </div>
+          </ScrollArea>
+        </div>
+        <div className="lg:col-span-7 flex flex-col h-full min-h-0">
           <ChatSimulator
             messages={messages}
             primaryColor={primaryColor}
@@ -144,23 +162,6 @@ const ChatbotPage = () => {
             handleReset={handleReset}
             scrollRef={scrollViewportRef}
           />
-        </div>
-        <div className="lg:col-span-5 h-full min-h-0 overflow-hidden flex flex-col">
-          <ScrollArea className="h-full pr-4">
-            <div className="space-y-6 pb-8">
-              <ApperanceConfig
-                primaryColor={primaryColor}
-                setPrimaryColor={setPrimaryColor}
-                welcomeMessage={welcomeMessage}
-                setWelcomeMessage={setWelcomeMessage}
-                handleSave={handleSave}
-                isSaving={isSaving}
-                hasChanges={hasChanges}
-              />
-
-              <EmbedCodeConfig chatbotId={metadata?.id} />
-            </div>
-          </ScrollArea>
         </div>
       </div>
     </div>
