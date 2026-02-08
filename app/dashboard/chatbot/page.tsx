@@ -2,6 +2,7 @@
 
 import ApperanceConfig from "@/components/dashboard/chatbot/apperanceConfig";
 import ChatSimulator from "@/components/dashboard/chatbot/chatSimulator";
+import EmbedCodeConfig from "@/components/dashboard/chatbot/embedCodeConfig";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -156,6 +157,18 @@ const ChatbotPage = () => {
                 isSaving={isSaving}
                 hasChanges={hasChanges}
               />
+
+
+<EmbedCodeConfig chatbotId={metadata?.id} />
+
+
+
+
+
+
+
+
+
             </div>
           </ScrollArea>
         </div>
