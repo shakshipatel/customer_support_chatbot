@@ -158,17 +158,7 @@ const ChatbotPage = () => {
                 hasChanges={hasChanges}
               />
 
-
-<EmbedCodeConfig chatbotId={metadata?.id} />
-
-
-
-
-
-
-
-
-
+              <EmbedCodeConfig chatbotId={metadata?.id} />
             </div>
           </ScrollArea>
         </div>
