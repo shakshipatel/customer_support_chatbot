@@ -1,12 +1,15 @@
 "use client";
 
-import { RefreshCw } from "lucide-react";
+import { Bot, RefreshCw, Send, User } from "lucide-react";
 
 import React, { RefObject } from "react";
 
 import { Button } from "@/components/ui/button";
 
 import { Card } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ChatSimulatorProps {
   messages: any[];
@@ -74,6 +77,127 @@ const ChatSimulator = ({
         >
           <RefreshCw className="w-3.5 h-3.5 mr-2" /> Reset
         </Button>
+      </div>
+
+      <ScrollArea className="flex-1 p-6 relative bg-zinc-950/30">
+        <div className="space-y-6 pb-4">
+          {messages.map((msg, i) => (
+            <div
+              key={i}
+              className={cn(
+                "flex w-full flex-col",
+                msg.role === "user" ? "items-end" : "items-start",
+              )}
+            >
+              <div
+                className={cn(
+                  "flex max-w-[80%] gap-3",
+                  msg.role === "user" ? "flex-row-reverse" : "flex-row",
+                )}
+              >
+                <div
+                  className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-white/5",
+                    msg.role === "user" ? "bg-zinc-800" : "text-white",
+                  )}
+                  style={
+                    msg.role !== "user" ? { backgroundColor: primaryColor } : {}
+                  }
+                >
+                  {msg.role === "user" ? (
+                    <User className="w-4 h-4 text-zinc-400" />
+                  ) : (
+                    <Bot className="w-4 h-4 text-white" />
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <div
+                    className={cn(
+                      "p-4 rounded-2xl text-sm leading-relaxed shadow-sm",
+                      msg.role === "user"
+                        ? "bg-zinc-800 text-zinc-200 rounded-tr-sm"
+                        : "bg-white text-zinc-900 rounded-tl-sm",
+                    )}
+                  >
+                    {msg.content}
+                  </div>
+
+                  {msg.isWelcome && sections.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1 ml-1 animate-in fade-in slide-in-from-top-1 duration-300">
+                      {sections.map((section) => (
+                        <button
+                          key={section.id}
+                          onClick={() => handleSectionClick(section.name)}
+                          className="px-3 py-1.5 rounded-full border text-xs text-zinc-400 bg-zinc-700 border-white/10 hover:bg-zinc-700 transition-colors"
+                        >
+                          {section.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Typing indicator */}
+          {isTyping && (
+            <div className="flex w-full justify-start">
+              <div className="flex max-w-[80%] gap-3 flex-row">
+                <div
+                  className="w-8 h-8 rounded-full flex items-end justify-center shrink-0 border border-white/5"
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <Bot className="w-4 h-4 text-white" />
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white text-zinc-900 rounded-tl-sm shadow-sm flex items-end gap-1">
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={scrollRef} />
+        </div>
+      </ScrollArea>
+
+      <div className="p-4 bg-[#0A0A0E] border-t border-white/5">
+        <div className="relative flex items-center">
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={!activeSection}
+            placeholder={
+              activeSection
+                ? "Type a message..."
+                : "Please select a category above to start..."
+            }
+            className="min-h-12.5 max-h-37.5 pr-12 outline-none text-white bg-zinc-900/50 border-white/10 resize-none rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          />
+          <Button
+            size="icon"
+            onClick={handleSend}
+            disabled={!activeSection || !input.trim()}
+            className={cn(
+              "absolute right-2 h-8 w-8 transition-colors",
+              !activeSection || !input.trim()
+                ? "bg-zinc-800 text-zinc-500"
+                : "",
+            )}
+            style={
+              activeSection && input.trim()
+                ? { backgroundColor: primaryColor, color: "white" }
+                : {}
+            }
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </Card>
   );

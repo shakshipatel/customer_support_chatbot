@@ -29,6 +29,13 @@
       "when": 1770372268561,
       "tag": "0003_natural_morlun",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770537454555,
+      "tag": "0004_nifty_steel_serpent",
+      "breakpoints": true
     }
   ]
 }

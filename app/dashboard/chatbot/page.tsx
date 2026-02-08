@@ -27,15 +27,86 @@ const ChatbotPage = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const metaRes = await fetch("/api/chatbot/metadata/fetch");
+        const metaData = await metaRes.json();
+        setMetadata(metaData);
+
+        if (metaData) {
+          setPrimaryColor(metaData.color || "#4f46e5");
+          setWelcomeMessage(
+            metaData.welcome_message || "Hi! How can I help you?",
+          );
+
+          setMessages([
+            {
+              role: "assistant",
+              content: metaData.welcome_message || "Hi! How can I help you?",
+              isWelcome: true,
+              section: null,
+            },
+          ]);
+        }
+        const sectionsRes = await fetch("/api/section/fetch");
+        if (sectionsRes.ok) {
+          const sectionsData = await sectionsRes.json();
+          setSections(sectionsData || []);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     if (scrollViewportRef.current) {
       scrollViewportRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isTyping]);
 
   const handleSend = async () => {};
-  const handleKeyDown = async () => {};
-  const handleSectionClick = async () => {};
-  const handleReset = async () => {};
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    handleSend();
+  }
+};
+  const handleSectionClick = async (sectionName: string) => {
+  setActiveSection(sectionName);
+  const userMsg = { role: "user", content: sectionName, section: null };
+  setMessages((prev) => [...prev, userMsg]);
+  setInput("");
+  setIsTyping(true);
+
+  setTimeout(() => {
+  setIsTyping(false);
+  const aiMsg = {
+    role: "assistant",
+    content: `You can ask me any question related to "${sectionName}"`,
+    section: sectionName,
+  };
+
+  setMessages((prev) => [...prev, aiMsg]);
+}, 800);
+
+};
+
+  const handleReset = async () => {
+  setActiveSection(null);
+  setMessages([
+    {
+      role: "assistant",
+      content: welcomeMessage,
+      isWelcome: true,
+      section: null,
+    },
+  ]);
+};
 
   return (
     <div className="p-6 md:p-8 space-y-8 max-w-400 mx-auto animate-in fade-in duration-500 h-[calc(100vh-64px)] overflow-hidden flex flex-col">
