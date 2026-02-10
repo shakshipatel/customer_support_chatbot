@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({
+export const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
@@ -32,21 +32,29 @@ ${markdown}
 
 export async function summarizeConversation(messages: any[]) {
   try {
-    const joined = messages
-      .map((m) => `${m.role}: ${m.content}`)
-      .join("\n");
+    const contents = [
+      {
+        role: "user",
+        parts: [
+          {
+            text: `Summarize the following conversation history into a concise paragraph, preserving key details and user intent. The final output MUST be under 2000 words.`,
+          },
+        ],
+      },
+      ...messages.map((m: any) => ({
+        role: m.role,
+        parts: [{ text: m.content }],
+      })),
+    ];
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `
-Summarize this conversation into one concise paragraph:
-${joined}
-`,
+      contents,
     });
 
-    return response.text;
-  } catch (err) {
-    console.error("Gemini summarizeConversation error:", err);
-    throw err;
+    return response.text ?? "";
+  } catch (error) {
+    console.error("Gemini summarizeConversation error:", error);
+    throw error;
   }
 }

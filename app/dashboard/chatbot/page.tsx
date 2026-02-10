@@ -72,8 +72,42 @@ const ChatbotPage = () => {
       scrollViewportRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isTyping]);
+const handleSend = async () => {
+  if (!input.trim()) return;
 
-  const handleSend = async () => {};
+  const currentSection = sections.find((s) => s.name === activeSection);
+  const sourceIds = currentSection?.source_ids || [];
+
+  const userMsg = { role: "user", content: input, section: activeSection };
+  setMessages((prev) => [...prev, userMsg]);
+  setInput("");
+  setIsTyping(true);
+
+  const res = await fetch("/api/chat/test", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: [...messages, userMsg],
+      knowledge_source_ids: sourceIds,
+    }),
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content: data.response,
+        section: null,
+      },
+    ]);
+  }
+
+  setIsTyping(false);
+};
+
   const handleKeyDown = async (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -111,11 +145,41 @@ const ChatbotPage = () => {
     ]);
   };
 
-  const handleSave = async () => {};
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/chatbot/metadata/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          color: primaryColor,
+          welcome_message: welcomeMessage,
+        }),
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setMetadata(updated);
+      } else {
+        console.error("Failed to save changes");
+      }
+    } catch (error) {
+      console.error("Failed to save:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const hasChanges = metadata
     ? primaryColor !== (metadata.color || "#4f46e5") ||
       welcomeMessage !== (metadata.welcome_message || "Hi! How can I help you?")
     : false;
+
+  if (loading) {
+    return (
+      <div className="p-8 text-zinc-500"> Loading chatbot configuration...</div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-6 animate-in fade-in duration-500 h-full overflow-hidden flex flex-col w-full">

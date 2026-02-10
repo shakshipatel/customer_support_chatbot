@@ -1,4 +1,4 @@
-import { Check, Code, Copy } from "lucide-react";
+import { AlertCircle, Check, Code, Copy } from "lucide-react";
 import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,13 @@ const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
               <Copy className="w-3 h-3" />
             )}
           </Button>
+        </div>
+
+        <div className="flex items-start gap-2 text-xs text-amber-500/80 bg-amber-500/5 p-2 rounded-md border border-amber-500/10">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>
+            Paste this code before the closing &lt;/head&gt; tag on your website .
+          </span>
         </div>
       </CardContent>
     </Card>
