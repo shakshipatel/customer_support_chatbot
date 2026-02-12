@@ -43,6 +43,20 @@
       "when": 1770714386611,
       "tag": "0005_aromatic_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1770901470488,
+      "tag": "0006_steady_the_fallen",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1770904490107,
+      "tag": "0007_pale_union_jack",
+      "breakpoints": true
     }
   ]
 }

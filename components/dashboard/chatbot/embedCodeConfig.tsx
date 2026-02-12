@@ -10,7 +10,7 @@ const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
   const handleCopyCode = () => {
     setCopied(true);
     navigator.clipboard.writeText(
-      `<script src="https://oneminutesupport.com/widget.js" data-id="${chatbotId}" defer></script>`,
+      `<script src="http://localhost:3000/widget.js" data-id="${chatbotId}" defer></script>`,
     );
     setTimeout(() => setCopied(false), 2000);
   };
@@ -29,9 +29,9 @@ const EmbedCodeConfig = ({ chatbotId }: { chatbotId: string | undefined }) => {
         <div className="relative group">
           <div className="bg-[#050509] border border-white/10 rounded-lg p-3 overflow-hidden">
             <code className="text-[10px] text-zinc-400 font-mono block overflow-x-auto">
-              {`<script src="https://oneminutesupport.com/widget.js" \n data-id="${
+              {`<script src="http://localhost:3000/widget.js" \n data-id="${
                 chatbotId || "..."
-              }" \n defer>\n</script>`}
+              }" \n defer> \n </script>`}
             </code>
           </div>
           <Button

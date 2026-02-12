@@ -6,7 +6,7 @@ import { isAuthorized } from "@/lib/isAuthorized";
 import { inArray } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-function mapRole(role: string): "user" | "model" {
+ export function mapRole(role: string): "user" | "model" {
   if (role === "assistant" || role === "model") return "model";
   return "user";
 }
