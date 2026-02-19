@@ -119,54 +119,52 @@ const EmbedPage = () => {
   }, [messages, isTyping, isOpen]); // Scroll when opened too
 
   const handleSend = async () => {
-  if (!input.trim() || !token) return;
+    if (!input.trim() || !token) return;
 
-  const currentSection = sections.find((s) => s.name === activeSection);
-  const sourceIds = currentSection?.source_ids || [];
+    const currentSection = sections.find((s) => s.name === activeSection);
+    const sourceIds = currentSection?.source_ids || [];
 
-  const userMsg = { role: "user", content: input, section: activeSection };
-  setMessages((prev) => [...prev, userMsg]);
-  setInput("");
-  setIsTyping(true);
+    const userMsg = { role: "user", content: input, section: activeSection };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
+    setIsTyping(true);
 
-  try {
-    const res = await fetch("/api/chat/public", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        messages: [...messages, userMsg],
-        knowledge_source_ids: sourceIds,
-      }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.response, section: null },
-      ]);
-    } else {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "I'm having trouble connecting right now. Please try again.",
-          section: null,
+    try {
+      const res = await fetch("/api/chat/public", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      ]);
+        body: JSON.stringify({
+          messages: [...messages, userMsg],
+          knowledge_source_ids: sourceIds,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: data.response, section: null },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I'm having trouble connecting right now. Please try again.",
+            section: null,
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTyping(false);
     }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setIsTyping(false);
-  }
-};
-
-
+  };
 
   const handleSectionClick = (sectionName: string) => {
     setActiveSection(sectionName);
@@ -221,17 +219,15 @@ const EmbedPage = () => {
     <div className="flex flex-col h-screen bg-[#0A0A0E] overflow-hidden rounded-xl border border-white/10 shadow-2xl">
       <div className="h-14 border-b border-white/5 flex items-center justify-between px-4 bg-[#0E0E12] shadow-sm shrink-0 z-20">
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-white/5 overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&q=80&fit=crop"
-                alt="Support Agent"
-                width={40}
-                height={40}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full" />
+          <div className="w-8 h-8 relative rounded-full flex items-center justify-center">
+            <Image
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&q=80&fit=crop"
+              alt="Support Agent"
+              width={50}
+              height={50}
+              className="w-full h-full rounded-full object-cover"
+            />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#0E0E12] rounded-full" />
           </div>
 
           <div>
@@ -270,15 +266,15 @@ const EmbedPage = () => {
                 )}
               >
                 {msg.role !== "user" && (
-                  <div className="w-9 h-9 relative rounded-full flex items-center justify-center shrink-0 border border-white/5">
+                  <div className="w-8 h-8 relative rounded-full flex items-center justify-center">
                     <Image
                       src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&q=80&fit=crop"
                       alt="Support Agent"
-                      width={40}
-                      height={40}
+                      width={50}
+                      height={50}
                       className="w-full h-full rounded-full object-cover"
                     />
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full"></div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#0E0E12] rounded-full" />
                   </div>
                 )}
 
@@ -314,17 +310,15 @@ const EmbedPage = () => {
           {isTyping && (
             <div className="flex w-full justify-start">
               <div className="flex max-w-[85%] gap-3 flex-row">
-                <div className="relative">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-white/5 overflow-hidden">
-                    <Image
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&q=80&fit=crop"
-                      alt="Support Agent"
-                      width={40}
-                      height={40}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full" />
+                <div className="w-8 h-8 relative rounded-full flex items-center justify-center">
+                  <Image
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&q=80&fit=crop"
+                    alt="Support Agent"
+                    width={50}
+                    height={50}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#0E0E12] rounded-full" />
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white text-zinc-900 rounded-tl-sm shadow-sm flex items-end gap-1">

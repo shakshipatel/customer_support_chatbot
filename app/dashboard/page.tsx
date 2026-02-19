@@ -1,34 +1,40 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import InitialForm from "@/components/dashboard/initialform";
+import DashboardOverView from "@/components/dashboard/dashboardOverview";
 
 const Page = () => {
-  const[isMetaDataAvailable,setIsMetaDataAvailable]=useState(false);
-  const[isLoading,setIsLoading]=useState(true);
+  const [isMetaDataAvailable, setIsMetaDataAvailable] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-useEffect(() => {
-  const fetchMetadata = async () => {
-    const response = await fetch('/api/metadata/fetch');
-    const data = await response.json();
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      const response = await fetch("/api/metadata/fetch");
+      const data = await response.json();
 
-    setIsMetaDataAvailable(data.exists);
-    setIsLoading(false);
-  };
+      setIsMetaDataAvailable(data.exists);
+      setIsLoading(false);
+    };
 
-  fetchMetadata();
-}, []);
+    fetchMetadata();
+  }, []);
 
-if(isLoading){
-  return (
-    <div className="flex-1 flex w-full items-center justify-center p-4" />
-  )}
-  
+  if (isLoading) {
+    return (
+      <div className="flex-1 flex w-full items-center justify-center p-4" />
+    );
+  }
+
   return (
     <div className="flex-1 flex w-full">
-      {!isMetaDataAvailable ? (<div className="w-full flex items-center justify-center p-4 ">
-      <InitialForm />
-      </div>):<></>}
+      {!isMetaDataAvailable ? (
+        <div className="w-full flex items-center justify-center p-4 ">
+          <InitialForm />
+        </div>
+      ) : (
+       <DashboardOverView />
+      )}
     </div>
   );
 };
