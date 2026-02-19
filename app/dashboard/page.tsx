@@ -27,9 +27,9 @@ const Page = () => {
   }
 
   return (
-    <div className="flex-1 flex w-full">
+    <div className="flex-1 w-full">
       {!isMetaDataAvailable ? (
-        <div className="w-full flex items-center justify-center p-4 ">
+        <div className="w-full flex items-center justify-center p-4 min-h-[calc(100vh-8rem)]">
           <InitialForm />
         </div>
       ) : (
