@@ -57,73 +57,55 @@ The platform provides:
 
 ### Landing Page
 
-> **[SCREENSHOT PLACEHOLDER — Landing Page Hero]**
-> *Full-width hero section with product headline, CTA buttons, and product preview.*
+![Hero Section](./public/hero.png)
+*Full-width hero section with product headline, CTA buttons, and product preview.*
 
 ---
 
-### Dashboard — Overview
-
+<!-- ### Dashboard — Overview
 > **[SCREENSHOT PLACEHOLDER — Dashboard Overview]**
 > *Stats cards showing knowledge sources, active sections, and total conversations.*
-
 ---
 
 ### Dashboard — Knowledge Base
-
 > **[SCREENSHOT PLACEHOLDER — Knowledge Base Page]**
 > *Table of knowledge sources with status badges (Active, Training, Error). Add sources via website URL, file upload, or raw text.*
-
 ---
 
 ### Dashboard — Add Knowledge Source Modal
-
 > **[SCREENSHOT PLACEHOLDER — Add Knowledge Modal]**
 > *Tabbed modal: "Website" tab (URL input), "Upload" tab (file drag-and-drop), "Text" tab (freeform input).*
-
 ---
 
 ### Dashboard — Sections
-
 > **[SCREENSHOT PLACEHOLDER — Sections Page]**
 > *Table of topic sections with tone badges (Strict, Neutral, Friendly, Empathetic) and status indicators.*
-
 ---
 
 ### Dashboard — Create Section
-
 > **[SCREENSHOT PLACEHOLDER — Create Section Form]**
 > *Form with section name, description, tone selector, allowed/blocked topics, and linked knowledge source multi-select.*
-
 ---
 
 ### Dashboard — Chatbot Playground
-
 > **[SCREENSHOT PLACEHOLDER — Chatbot Playground]**
 > *Three-panel view: live chat simulator on the left, appearance config (color picker, welcome message) on the right, embed code at the bottom.*
-
 ---
 
 ### Dashboard — Conversations Inbox
-
 > **[SCREENSHOT PLACEHOLDER — Conversations Inbox]**
 > *Sidebar list of visitor conversations with IP-based visitor names. Selected conversation shows full message thread with human reply input.*
-
 ---
 
 ### Dashboard — Settings / Team Management
-
 > **[SCREENSHOT PLACEHOLDER — Team Settings Page]**
 > *Table of team members with roles and statuses (Active, Pending). "Invite Member" button to send SSO invitations.*
-
 ---
 
 ### Embedded Widget (on Client Website)
-
 > **[SCREENSHOT PLACEHOLDER — Embedded Chat Widget]**
 > *Floating chat button in the bottom-right corner of a webpage. Expanded state shows the chat interface with welcome message and message history.*
-
----
+--- -->
 
 ## Features
 
