@@ -152,7 +152,8 @@ const EmbedWidget = () => {
           ...prev,
           {
             role: "assistant",
-            content: "I'm having trouble connecting right now. Please try again.",
+            content:
+              "I'm having trouble connecting right now. Please try again.",
             section: null,
           },
         ]);
@@ -229,8 +230,12 @@ const EmbedWidget = () => {
           </div>
 
           <div>
-            <h1 className="text-sm font-semibold text-white leading-none">Support</h1>
-            <span className="text-[11px] text-emerald-400 font-medium">Online</span>
+            <h1 className="text-sm font-semibold text-white leading-none">
+              Support
+            </h1>
+            <span className="text-[11px] text-emerald-400 font-medium">
+              Online
+            </span>
           </div>
         </div>
 
@@ -346,7 +351,9 @@ const EmbedWidget = () => {
             disabled={!activeSection || !input.trim()}
             className={cn(
               "absolute right-2 h-8 w-8 transition-colors",
-              !activeSection || !input.trim() ? "bg-zinc-800 text-zinc-500" : "",
+              !activeSection || !input.trim()
+                ? "bg-zinc-800 text-zinc-500"
+                : "",
             )}
             style={
               activeSection && input.trim()
