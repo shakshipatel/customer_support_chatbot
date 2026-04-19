@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { isAuthorized } from "@/lib/isAuthorized";
 
-const Navbar = async() => {
+const Navbar = async () => {
   const user = await isAuthorized();
   return (
     <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-300 backdrop-blur">
@@ -36,18 +36,22 @@ const Navbar = async() => {
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
-          <Link
+          <a
             href="/api/auth"
+            target="_self"
+            rel="noopener noreferrer"
             className="text-xs font-medium text-zinc-400 hover:text-white transition-colors"
           >
             Sign in
-          </Link>
-          <Link
+          </a>
+          <a
             href="/api/auth"
+            target="_self"
+            rel="noopener noreferrer"
             className="text-xs font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-zinc-200 transition-colors"
           >
             Get started
-          </Link>
+          </a>
         </div>
       </div>
     </nav>

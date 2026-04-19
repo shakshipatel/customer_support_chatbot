@@ -7,8 +7,9 @@ import {
   LayoutDashboard,
   MessageSquare,
   Settings,
+  LogOut,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/hooks/useUser";
@@ -27,85 +28,129 @@ const SIDEBAR_ITEMS = [
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const{email}= useUser();
-  const[metadata,setMetadata]=useState<any>();
-  const[isLoading,setIsLoading]=useState(true);
+  const { email } = useUser();
+  const [metadata, setMetadata] = useState<any>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
-useEffect(() => {
-  const fetchMetadata = async () => {
-    const response = await fetch("/api/metadata/fetch");
-    const res = await response.json();
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      const response = await fetch("/api/metadata/fetch");
+      const res = await response.json();
 
-    setMetadata(res.data);
-    setIsLoading(false);
+      setMetadata(res.data);
+      setIsLoading(false);
+    };
+
+    fetchMetadata();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(e.target as Node)
+      ) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    if (showProfileMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showProfileMenu]);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (response.ok) {
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-
-  fetchMetadata();
-}, []);
-
-
 
   return (
     <aside className="w-64 border-r border-white/5 bg-[#050509] flex-col h-screen fixed left-0 top-0 z-40 hidden md:flex">
       <div className="h-16 flex items-center px-6 border-b border-white/5">
         <div className="flex items-center gap-2">
           <Link href={"/"} className="flex items-center gap-2">
-          {/* Logo Mark */}
-          <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
-            <div className="w-2.5 h-2.5 bg-black rounded-[1px]"></div>
-          </div>
-          <span className="text-sm font-medium tracking-tight text-white/90">
-            OneMinute Support
-          </span>
+            {/* Logo Mark */}
+            <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+              <div className="w-2.5 h-2.5 bg-black rounded-[1px]"></div>
+            </div>
+            <span className="text-sm font-medium tracking-tight text-white/90">
+              OneMinute Support
+            </span>
           </Link>
         </div>
       </div>
 
-<nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-  {SIDEBAR_ITEMS.map((item) => {
-    const isActive = pathname === item.href;
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        {SIDEBAR_ITEMS.map((item) => {
+          const isActive = pathname === item.href;
 
-    return (
-      <Link
-        key={item.href}
-        href={item.href}
-        className={cn(
-          "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-          isActive
-            ? "bg-white/5 text-white"
-            : "text-zinc-400 hover:text-white hover:bg-white/5"
-        )}
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                isActive
+                  ? "bg-white/5 text-white"
+                  : "text-zinc-400 hover:text-white hover:bg-white/5",
+              )}
+            >
+              <item.icon className="w-4 h-4" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Profile / Bottom Area */}
+      <div
+        className="p-4 border-t border-white/5 relative"
+        ref={profileMenuRef}
       >
-        <item.icon className="w-4 h-4" />
-        {item.label}
-      </Link>
-    );
-  })}
-</nav>
+        <button
+          onClick={() => setShowProfileMenu(!showProfileMenu)}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white/5 cursor-pointer transition-colors group"
+        >
+          <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center border border-white/10">
+            <span className="text-xs text-zinc-400 group-hover:text-white">
+              {metadata?.business_name?.slice(0, 2).toUpperCase() || ".."}
+            </span>
+          </div>
+          <div className="flex flex-col overflow-hidden text-left">
+            <span className="text-sm font-medium text-zinc-300 truncate group-hover:text-white">
+              {isLoading
+                ? "Loading..."
+                : `${metadata?.business_name}'s Workspace`}
+            </span>
+            <span className="text-xs text-zinc-500 truncate">{email}</span>
+          </div>
+        </button>
 
-{/* Profile / Bottom Area */}
-<div className="p-4 border-t border-white/5">
-  <div className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white/5 cursor-pointer transition-colors group">
-    <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center border border-white/10">
-      <span className="text-xs text-zinc-400 group-hover:text-white">
-        {metadata?.business_name?.slice(0, 2).toUpperCase() || ".."}
-      </span>
-    </div>
-    <div className="flex flex-col overflow-hidden">
-      <span className="text-sm font-medium text-zinc-300 truncate group-hover:text-white">
-        {isLoading
-          ? "Loading..."
-          : `${metadata?.business_name}'s Workspace`}
-      </span>
-      <span className="text-xs text-zinc-500 truncate">
-        {email}
-      </span>
-    </div>
-  </div>
-</div>
+        {/* Dropdown Menu */}
+        {showProfileMenu && (
+          <div className="absolute bottom-16 left-4 right-4 bg-zinc-900 border border-white/10 rounded-md shadow-lg overflow-hidden">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm text-zinc-300 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
     </aside>
   );
 };
 
 export default Sidebar;
-

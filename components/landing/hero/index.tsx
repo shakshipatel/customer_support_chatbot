@@ -30,10 +30,15 @@ const Hero = () => {
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-          <button className="flex items-center gap-2 h-11 px-8 rounded-full cursor-pointer bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-all flex items-center gap-2">
+          <a
+            href="/api/auth"
+            target="_self"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 h-11 px-8 rounded-full bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-all"
+          >
             Start for free
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </a>
           <button className="h-11 px-8 rounded-full border border-zinc-800 text-zinc-300 text-sm font-medium hover:bg-zinc-600 hover:text-white bg-black/20 backdrop-blur-sm transition-all">
             View demo
           </button>
@@ -112,22 +117,19 @@ const Hero = () => {
                         community support.
                       </div>
                     </div>
-                    
                   </div>
                 </div>
               </div>
               <div className="p-4 bg-[#0A0A0E] border-t border-white/5 shrink-0">
-                    <div className="relative">
-                      <div className="min-h-12.5 w-full  px-4 py-3 text-sm bg-zinc900/50 border border-white/10 rounded-xl flex items-center justify-between text-zinc-500">
-                        <span>
-                          Type a message...
-                        </span>
-                        <button className="h-8 w-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-500 cursor-default">
-                          <Send className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                    </div>
+                <div className="relative">
+                  <div className="min-h-12.5 w-full  px-4 py-3 text-sm bg-zinc900/50 border border-white/10 rounded-xl flex items-center justify-between text-zinc-500">
+                    <span>Type a message...</span>
+                    <button className="h-8 w-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-500 cursor-default">
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

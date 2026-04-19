@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
+import * as crypto from "crypto";
 import { cookies } from "next/headers";
 import scalekit from "@/lib/scalekit";
 
 export async function GET() {
-
   try {
     const state = crypto.randomBytes(16).toString("hex");
 
@@ -21,16 +20,14 @@ export async function GET() {
       state,
     };
 
-    const authorizationUrl =
-      scalekit.getAuthorizationUrl(redirectUri, options);
+    const authorizationUrl = scalekit.getAuthorizationUrl(redirectUri, options);
 
     return NextResponse.redirect(authorizationUrl);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       { error: "Failed to generate authorization URL" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-import { NextRequest } from "next/server";

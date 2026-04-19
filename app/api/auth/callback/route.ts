@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-  const response = NextResponse.redirect(new URL("/", req.url));
+    const response = NextResponse.redirect(new URL("/dashboard", req.url));
     const userSession = {
       email: user.email,
       organization_id: organizationId,
