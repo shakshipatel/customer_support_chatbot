@@ -1,6 +1,6 @@
 <div align="center">
 
-# ServiceMate
+# One Minute Support
 
 ### AI-Powered Customer Support Chatbot Platform
 
@@ -287,7 +287,7 @@ Visitor Message
 ```bash
 # 1. Clone the repository
 git clone https://github.com/your-username/servicemate.git
-cd servicemate
+cd customer_support_chatbot
 
 # 2. Install dependencies
 npm install
