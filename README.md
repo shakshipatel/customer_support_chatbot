@@ -7,7 +7,6 @@
 An enterprise-ready, fully customizable chatbot platform that lets businesses deploy an AI support agent trained on their own knowledge base — with a no-code embed widget, conversation inbox, and team management dashboard.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Google Gemini](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-4285F4?logo=google)](https://ai.google.dev/)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql)](https://www.postgresql.org/)
@@ -133,7 +132,6 @@ The platform provides:
 
 ### Frontend
 - **[Next.js 16](https://nextjs.org/)** — App Router, Server Components, API Routes
-- **[React 19](https://react.dev/)** — UI library
 - **[TypeScript](https://www.typescriptlang.org/)** — Type safety across the full stack
 - **[Tailwind CSS v4](https://tailwindcss.com/)** — Utility-first styling
 - **[Radix UI](https://www.radix-ui.com/)** — Accessible, unstyled primitives
